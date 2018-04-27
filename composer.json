@@ -1,0 +1,21 @@
+{
+    "name": "yeedomliu/interfaces",
+    "description": "通用接口封装",
+    "version": "1.0.1",
+    "type": "library",
+    "keywords": ["通用接口封装"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "yeedomliu",
+            "email": "36749952@qq.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "yeedomliu\\interfaces\\": ""
+        }
+    }
+}
