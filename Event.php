@@ -1,6 +1,6 @@
 <?php
 
-namespace wii\interfaces;
+namespace yeedomliu\interfaces;
 
 use wii\interfaces\eventfields\Fields;
 use wii\interfaces\eventfields\Method;

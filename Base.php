@@ -1,6 +1,6 @@
 <?php
 
-namespace wii\interfaces;
+namespace yeedomliu\interfaces;
 
 use wii\helpers\Inflector;
 use wii\interfaces\fieldstyle\LcfirstCamelize;

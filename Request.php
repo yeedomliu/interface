@@ -1,6 +1,6 @@
 <?php
 
-namespace wii\interfaces;
+namespace yeedomliu\interfaces;
 
 use wii\base\Component;
 use wii\interfaces\requestfields\ExcludeFields;
