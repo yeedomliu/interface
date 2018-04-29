@@ -1,6 +1,6 @@
 <?php
 
-namespace wii\interfaces\requestfields;
+namespace yeedomliu\interfaces\requestfields;
 
 trait Fields
 {
@@ -21,6 +21,8 @@ trait Fields
 
     /**
      * @param array $fields
+     *
+     * @return $this
      */
     public function setFields(array $fields) {
         $this->fields = $fields;

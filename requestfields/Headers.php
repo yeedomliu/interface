@@ -21,6 +21,8 @@ trait Headers
 
     /**
      * @param array $headers
+     *
+     * @return $this
      */
     public function setHeaders(array $headers) {
         $this->headers = $headers;

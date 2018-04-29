@@ -1,6 +1,6 @@
 <?php
 
-namespace wii\interfaces\fieldstyle;
+namespace yeedomliu\interfaces\fieldstyle;
 
 use wii\helpers\Inflector;
 
@@ -9,7 +9,6 @@ use wii\helpers\Inflector;
  *
  * 类似把 "send_email" 转换成 "sendEmail"
  *
- * @package wii\interfaces\fieldstyle
  */
 class LcfirstCamelize extends Base
 {

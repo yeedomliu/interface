@@ -1,15 +1,14 @@
 <?php
 
-namespace wii\interfaces\fieldstyle;
+namespace yeedomliu\interfaces\fieldstyle;
 
-use wii\helpers\Inflector;
+use yii\helpers\Inflector;
 
 /**
  * Class Camelize
  *
  * 类似把 "send_email" 转换成 "SendEmail"
  *
- * @package wii\interfaces\fieldstyle
  */
 class Camelize extends Base
 {

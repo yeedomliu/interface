@@ -21,6 +21,8 @@ trait ExcludeFields
 
     /**
      * @param array $excludeFields
+     *
+     * @return $this
      */
     public function setExcludeFields(array $excludeFields) {
         $this->excludeFields = $excludeFields;

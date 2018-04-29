@@ -22,7 +22,7 @@ trait JsonEncodeFields
     /**
      * @param bool $jsonEncodeFields
      *
-     * @return JsonEncodeFields
+     * @return $this
      */
     public function setJsonEncodeFields(bool $jsonEncodeFields) {
         $this->jsonEncodeFields = $jsonEncodeFields;

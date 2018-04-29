@@ -1,6 +1,6 @@
 <?php
 
-namespace wii\interfaces\fieldstyle;
+namespace yeedomliu\interfaces\fieldstyle;
 
 /**
  * 字段风格处理

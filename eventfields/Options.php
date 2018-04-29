@@ -1,6 +1,6 @@
 <?php
 
-namespace wii\interfaces\eventfields;
+namespace yeedomliu\interfaces\eventfields;
 
 trait Options
 {

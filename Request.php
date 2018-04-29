@@ -2,16 +2,16 @@
 
 namespace yeedomliu\interfaces;
 
-use wii\base\Component;
-use wii\interfaces\requestfields\ExcludeFields;
-use wii\interfaces\requestfields\Fields;
-use wii\interfaces\requestfields\Headers;
-use wii\interfaces\requestfields\JsonEncodeFields;
-use wii\interfaces\requestfields\Method;
-use wii\interfaces\requestfields\Options;
-use wii\interfaces\requestfields\Prefix;
-use wii\interfaces\requestfields\Raw;
-use wii\interfaces\requestfields\Url;
+use yeedomliu\interfaces\requestfields\ExcludeFields;
+use yeedomliu\interfaces\requestfields\Fields;
+use yeedomliu\interfaces\requestfields\Headers;
+use yeedomliu\interfaces\requestfields\JsonEncodeFields;
+use yeedomliu\interfaces\requestfields\Method;
+use yeedomliu\interfaces\requestfields\Options;
+use yeedomliu\interfaces\requestfields\Prefix;
+use yeedomliu\interfaces\requestfields\Raw;
+use yeedomliu\interfaces\requestfields\Url;
+use yii\base\Component;
 
 /**
  * 接口请求
