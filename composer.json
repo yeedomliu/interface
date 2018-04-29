@@ -3,7 +3,7 @@
     "description": "通用接口封装",
     "version": "1.0.1",
     "type": "library",
-    "keywords": ["通用接口封装"],
+    "keywords": ["接口封装"],
     "license": "MIT",
     "authors": [
         {
@@ -12,6 +12,7 @@
         }
     ],
     "require": {
+        "yiisoft/yii2": "*"
     },
     "autoload": {
         "psr-4": {
