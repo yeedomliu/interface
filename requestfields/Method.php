@@ -1,6 +1,6 @@
 <?php
 
-namespace wii\interfaces\requestfields;
+namespace yeedomliu\interfaces\requestfields;
 
 use wii\interfaces\Request;
 

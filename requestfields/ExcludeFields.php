@@ -1,7 +1,6 @@
 <?php
 
-namespace yeedomliu\interfaces;
-namespace wii\interfaces\requestfields;
+namespace yeedomliu\interfaces\requestfields;
 
 trait ExcludeFields
 {
