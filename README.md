@@ -1,7 +1,6 @@
-通用接口封装
+通用接口封装服务
 ======
-通用接口封装
-
+比如我们要对第三方接口功能进行封装，如微信、企业微信、腾讯云等开放api，通用接口封装服务提供了一种简洁、优雅、高效的方式
 Installation
 ------------
 
@@ -22,10 +21,45 @@ or add
 to the require section of your `composer.json` file.
 
 
-Usage
+使用示例
 -----
 
-Once the extension is installed, simply use it in your code by  :
+
+```
+php composer.phar require --prefer-dist yeedomliu/workwx "*"
+```
+
+自定义请求参数
+-----
 
 ```php
-<?= \yeedomliu\interfaces\AutoloadExample::widget(); ?>```
+<?="hello world"?>
+```
+
+默认参数处理
+-----
+
+```php
+<?="hello world"?>
+```
+
+请求方式修改
+-----
+
+```php
+<?="hello world"?>
+```
+
+字段名规则变更
+-----
+
+```php
+<?="hello world"?>
+```
+
+单独调试接口不影响其它接口
+-----
+
+```php
+<?="hello world"?>
+```
