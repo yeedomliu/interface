@@ -1,6 +1,6 @@
 <?php
 
-namespace yeedomliu\interfaces\requestfields;
+namespace wii\interfaces\requestfields;
 
 trait Headers
 {
@@ -11,6 +11,13 @@ trait Headers
      * @var array
      */
     protected $headers = [];
+
+    /**
+     * 请求头部map数组
+     *
+     * @var array
+     */
+    protected $mapHeaders = [];
 
     /**
      * @return array
@@ -40,7 +47,17 @@ trait Headers
      */
     public function addHeader($name, $value) {
         $this->headers[] = "{$name}:{$value}";
+        $this->mapHeaders[ $name ] = $value;
 
         return $this;
+    }
+
+    /**
+     * 获取请求头部map数组
+     *
+     * @return array
+     */
+    public function getMapHeaders() {
+        return $this->mapHeaders;
     }
 }

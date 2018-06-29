@@ -1,6 +1,6 @@
 <?php
 
-namespace yeedomliu\interfaces\eventfields;
+namespace wii\interfaces\eventfields;
 
 trait Fields
 {
@@ -8,23 +8,23 @@ trait Fields
     /**
      * 字段
      *
-     * @var array
+     * @var array|string
      */
     protected $fields = [];
 
     /**
-     * @return array
+     * @return array|string
      */
-    public function getFields(): array {
+    public function getFields() {
         return $this->fields;
     }
 
     /**
-     * @param array $fields
+     * @param array|string $fields
      *
      * @return $this
      */
-    public function setFields(array $fields) {
+    public function setFields($fields) {
         $this->fields = $fields;
 
         return $this;

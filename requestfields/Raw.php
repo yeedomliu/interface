@@ -1,6 +1,6 @@
 <?php
 
-namespace yeedomliu\interfaces\requestfields;
+namespace wii\interfaces\requestfields;
 
 trait Raw
 {
@@ -20,9 +20,16 @@ trait Raw
     }
 
     /**
+     * @return bool
+     */
+    public function getRaw() {
+        return $this->isRaw();
+    }
+
+    /**
      * @param bool $raw
      *
-     * @return Raw
+     * @return $this
      */
     public function setRaw(bool $raw) {
         $this->raw = $raw;

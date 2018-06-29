@@ -2,12 +2,14 @@
 
 namespace yeedomliu\interfaces;
 
+use wii\interfaces\eventfields\Exception;
 use wii\interfaces\eventfields\Fields;
 use wii\interfaces\eventfields\Method;
 use wii\interfaces\eventfields\Options;
 use wii\interfaces\eventfields\Result;
 use wii\interfaces\eventfields\Status;
 use wii\interfaces\eventfields\Url;
+use wii\interfaces\requestfields\Headers;
 
 /**
  * 接口请求
@@ -17,7 +19,7 @@ use wii\interfaces\eventfields\Url;
 class Event extends \yii\base\Event
 {
 
-    use Fields, Method, Options, Result, Url, Status;
+    use Fields, Method, Options, Result, Url, Status, Exception, Headers;
 
     /**
      * @var \wii\interfaces\Request

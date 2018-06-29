@@ -1,6 +1,6 @@
 <?php
 
-namespace yeedomliu\interfaces\requestfields;
+namespace wii\interfaces\requestfields;
 
 trait Fields
 {
@@ -8,23 +8,21 @@ trait Fields
     /**
      * 请求字段数组
      *
-     * @var array
+     * @var array|string
      */
     protected $fields = [];
 
     /**
-     * @return array
+     * @return array|string
      */
-    public function getFields(): array {
+    public function getFields() {
         return $this->fields;
     }
 
     /**
-     * @param array $fields
-     *
-     * @return $this
+     * @param array|string $fields
      */
-    public function setFields(array $fields) {
+    public function setFields($fields) {
         $this->fields = $fields;
 
         return $this;

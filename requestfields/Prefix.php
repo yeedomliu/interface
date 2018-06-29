@@ -1,6 +1,6 @@
 <?php
 
-namespace yeedomliu\interfaces\requestfields;
+namespace wii\interfaces\requestfields;
 
 trait Prefix
 {

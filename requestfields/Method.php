@@ -1,6 +1,6 @@
 <?php
 
-namespace yeedomliu\interfaces\requestfields;
+namespace wii\interfaces\requestfields;
 
 use wii\interfaces\Request;
 
@@ -54,6 +54,8 @@ trait Method
         return $this;
     }
 
+
+
     /**
      * 是否是post请求
      *
@@ -62,6 +64,7 @@ trait Method
     public function isPostMethod() {
         return Request::METHOD_POST == strtolower(trim($this->method));
     }
+
 
 
 }

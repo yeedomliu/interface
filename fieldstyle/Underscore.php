@@ -1,13 +1,15 @@
 <?php
 
-namespace yeedomliu\interfaces\fieldstyle;
+namespace wii\interfaces\fieldstyle;
 
-use yii\helpers\Inflector;
+use wii\helpers\Inflector;
 
 /**
  * Class Underscore
  *
  * 把 "CamelCased" 转换成 "underscored_word"
+ *
+ * @package wii\interfaces\fieldstyle
  */
 class Underscore extends Base
 {

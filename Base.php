@@ -4,31 +4,24 @@ namespace yeedomliu\interfaces;
 
 use wii\helpers\Inflector;
 use wii\interfaces\fieldstyle\LcfirstCamelize;
+use wii\interfaces\requestfields\CacheKey;
+use wii\interfaces\requestfields\CacheTime;
+use wii\interfaces\requestfields\ExcludeEmptyField;
+use wii\interfaces\requestfields\FullUrl;
+use wii\interfaces\requestfields\GetFields;
+use wii\interfaces\requestfields\PostFields;
+use wii\interfaces\requestfields\PostRequest;
+use wii\interfaces\requestfields\Url;
 
 class Base
 {
 
-    /**
-     * @return $this
-     */
-    public function getPostRequest() {
-        return (new Request())->setPostMethod();
-    }
+    use CacheTime, CacheKey, FullUrl, ExcludeEmptyField, PostRequest, Url, PostFields, GetFields;
 
     /**
-     * @return $this
+     * 初始化操作
      */
-    public function getGetRequest() {
-        return (new Request())->setGetMethod();
-    }
-
-    /**
-     * 是否是post请求
-     *
-     * @return bool
-     */
-    public function isPostRequest() {
-        return false;
+    public function init() {
     }
 
     /**
@@ -37,7 +30,26 @@ class Base
      * @return string
      */
     public function url() {
-        return '';
+        return $this->getUrl() ? $this->getUrl() : '';
+    }
+
+    /**
+     * 获取带参数路径
+     *
+     * @return string
+     */
+    public function fullUrl() {
+        $url = $this->url();
+        if ($this->defaultGetFields()) {
+            $getFields = [];
+            foreach ($this->defaultGetFields() as $name => $value) {
+                $getFields[] = "{$name}={$value}";
+            }
+            $url .= preg_match('/\?/is', $url) ? "&" : "?";
+            $url .= join('&', $getFields);
+        }
+
+        return $url;
     }
 
     /**
@@ -47,7 +59,6 @@ class Base
      */
     public function requestPrefix() {
         return '';
-        //        return 'https://qyapi.weixin.qq.com/cgi-bin/';
     }
 
     /**
@@ -67,7 +78,10 @@ class Base
      * @return \wii\interfaces\Request
      */
     public function getRequestObj() {
-        $requestObj = $this->isPostRequest() ? $this->getPostRequest() : $this->getGetRequest();
+        $requestObj = (new Request());
+        $this->isPostRequest() ? $requestObj->setPostMethod() : $requestObj->setGetMethod();
+
+        //        $requestObj = $this->isPostRequest() ? $this->getPostRequest() : $this->getGetRequest();
 
         return $this->requestHandle($requestObj->setPrefix($this->requestPrefix()));
     }
@@ -79,6 +93,17 @@ class Base
      */
     public function getFieldNameHandleObj() {
         return new LcfirstCamelize();
+    }
+
+    /**
+     * 请求开始
+     *
+     * @return $this
+     */
+    public function eventStart() {
+        \yii\base\Event::off(Request::className(), Request::EVENT_REQUEST_START);
+
+        return $this;
     }
 
     /**
@@ -112,6 +137,7 @@ class Base
                            'fields'  => $event->getFields(),
                            'method'  => $event->getMethod(),
                            'result'  => $event->getResult(),
+                           'header'  => $event->getHeaders(),
                            'options' => $event->getOptions(),
                            'status'  => $event->getStatus(),
                        ], 'request.result');
@@ -128,22 +154,37 @@ class Base
     public function eventException() {
         \yii\base\Event::off(Request::className(), Request::EVENT_REQUEST_EXCEPTION);
         \yii\base\Event::on(Request::className(), Request::EVENT_REQUEST_EXCEPTION, function (Event $event) {
+            \Yii::info([
+                           'url'            => $event->getUrl(),
+                           'fields'         => $event->getFields(),
+                           'method'         => $event->getMethod(),
+                           'result'         => $event->getResult(),
+                           'options'        => $event->getOptions(),
+                           'status'         => $event->getStatus(),
+                           'exception_msg'  => $event->getException()->getMessage(),
+                           'exception_code' => $event->getException()->getCode(),
+                       ], 'request.exception');
         });
 
         return $this;
     }
 
     /**
-     * 开始执行请求
+     * 获取处理完字段数组
+     * 1.获取trait字段数组
+     * 2.加入默认字段、自定义字段、去除排除字段
      *
-     * @return mixed
+     * @return array
      */
-    public function start() {
-        $requestObj = $this->getRequestObj();
-
-        // 把trait的属性都转换为字段名
+    public function getHandledFields() {
         $obj = new \ReflectionClass(get_called_class());
         $traits = $obj->getTraits();
+        if ($obj->getParentClass()) {
+            $parentTraits = $obj->getParentClass()->getTraits();
+            if ($parentTraits) {
+                $traits = array_merge($traits, $parentTraits);
+            }
+        }
         $fields = [];
         if ($traits) {
             foreach ($traits as $trait) {
@@ -159,10 +200,86 @@ class Base
             }
         }
         $fields = array_merge($fields, $this->defaultFields(), $this->customFields());
+        if ($this->excludeFields()) {
+            foreach ($this->excludeFields() as $excludeField) {
+                unset($fields[ $excludeField ]);
+            }
+        }
 
-        $this->eventBefore()->eventAfter()->eventException();
+        // 排除空字段值
+        if ($this->isExcludeEmptyField()) {
+            foreach ($fields as $key => $value) {
+                if (is_object($value)) {
+                    continue;
+                }
+                if (is_array($value)) {
+                    if (empty($value)) {
+                        unset($fields[ $key ]);
+                    }
+                } elseif (0 == strlen($value)) {
+                    unset($fields[ $key ]);
+                }
+            }
+        }
 
-        return $requestObj->setFields($fields)->setExcludeFields($this->excludeFields())->setUrl($this->url())->request();
+        return $fields;
+    }
+
+    /**
+     * 开始执行请求
+     *
+     * @return mixed
+     */
+    public function start() {
+        $this->init();
+
+        $requestObj = $this->getRequestObj();
+        // 请求头部处理
+        if ($this->requestHeaders()) {
+            foreach ($this->requestHeaders() as $key => $value) {
+                $requestObj->addHeader($key, $value);
+            }
+        }
+
+        // 把trait的属性都转换为字段名
+        $fields = $this->getHandledFields();
+
+        // 事件处理
+        $this->eventStart()->eventBefore()->eventAfter()->eventException();
+
+        $result = $requestObj->setHttpBuildQuery($this->httpBuildQuery())
+                             ->setJsonEncodeFields($this->jsonEncodeFields())
+                             ->setFields($fields)
+                             ->setExcludeFields($this->excludeFields())
+                             ->setUrl($this->fullUrl())
+                             ->setFullUrl($this->getFullUrl())
+                             ->setRaw($this->returnRaw() ? true : false)
+                             ->setCacheTime($this->getCacheTime())
+                             ->setCacheKey($this->getCacheKey())
+                             ->request();
+
+        $this->checkResult($result);
+
+        return $this->customOutput($result);
+    }
+
+    /**
+     * 自定义输出
+     *
+     * @param $result
+     *
+     * @return mixed
+     */
+    public function customOutput($result) {
+        return $result;
+    }
+
+    /**
+     * 检查结果是否正确
+     *
+     * @param $result
+     */
+    public function checkResult($result) {
     }
 
     /**
@@ -184,11 +301,58 @@ class Base
     }
 
     /**
+     * 默认get参数
+     *
+     * @return array
+     */
+    public function defaultGetFields() {
+        return $this->getGetFields() ? $this->getGetFields() : [];
+    }
+
+    /**
      * 默认字段
      *
      * @return array
      */
     public function defaultFields() {
+        return $this->getPostFields() ? $this->getPostFields() : [];
+    }
+
+    /**
+     * 返回原始数据
+     *
+     * @return bool
+     */
+    public function returnRaw() {
+        return false;
+    }
+
+    /**
+     * json_encode字段值
+     *
+     * @return bool
+     */
+    public function jsonEncodeFields() {
+        return false;
+    }
+
+    /**
+     * http_build_query处理
+     *
+     * 如果提交多维数组需要设置为true对请求的字段进行处理
+     *
+     * @return bool
+     */
+    public function httpBuildQuery() {
+        return false;
+    }
+
+    /**
+     * 请求头部信息数组，以key/value形式
+     *
+     * @return array
+     */
+    public function requestHeaders() {
         return [];
     }
 
